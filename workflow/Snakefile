@@ -1,0 +1,58 @@
+from snakemake.utils import min_version
+
+#------------- min snakemake version ------------
+min_version('6.7.0')
+
+#------------- setup ------------
+configfile: 'config/config.yaml'
+
+report: 'report/workflow.rst'
+
+#------------- load rules ------------
+
+include: 'rules/common.smk'
+include: 'rules/qc.smk'
+
+#------------- workflow ------------
+
+rule all:
+    input:
+        get_fastqc_output(),
+        get_fastqscreen_output(),
+        'results/qc_metrics/multiqc_report.html',
+        #expand('{cell}', cell=cells),
+        #expand('{cell}.yaml', cell=cells),
+        #expand('{cell}.zUMIs_YAMLerror.log', cell=cells)
+
+#rule write_sample_name:
+#    input:
+#        r1='fastq/{cell}_R1.fastq.gz'
+#    output:
+#        temp('{cell}')
+#    shell:
+#        '''
+#        echo {input.r1} > {output} 
+#        '''
+
+#rule create_zUMI_yaml:
+#    input:
+#        '{cell}'
+#    output:
+#        '{cell}.yaml'
+#    shell:
+#        '''
+#            sed 's/SAMPLE/{input}/g' < {config[Generic_zUMI_yaml]} > {output} 
+#        '''
+#
+#rule run_zUMI_yaml:
+#    input:
+#        '{cell}.yaml'
+#    output:
+#        '{cell}.zUMIs_YAMLerror.log'
+#    threads: 12
+#    shell:
+#        ''' 
+#        bash /stornext/HPCScratch/home/brown.d/zUMIs/zUMIs.sh \
+#        -c -y {input}
+#        '''
+
