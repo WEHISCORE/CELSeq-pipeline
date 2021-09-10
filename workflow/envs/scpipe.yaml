@@ -1,0 +1,6 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - bioconductor-scpipe =1.14.0-0
+  - bioconductor-rsubread =2.6.1-0

@@ -1,2 +1,35 @@
-FastqScreen_config:
-    config/fastq_screen.conf
+# config file for Fastq Screen
+FastqScreen_config: config/fastq_screen.conf
+
+# sample sheet with barcode information
+sample_sheet: metadata/samplesheet.csv
+
+ref:
+    # gene GTF reference
+    gtf: /stornext/Projects/score/Indexes/GRCh38.p13gencode.v35.primary_assembly.annotation.gtf
+
+filter_settings:
+    # affects read filter settings passed to scpipe::sc_trim_barcode
+    # rmlow param
+    remove_lowqual_reads: TRUE
+    # rmN param (remove reads with Ns in barcode or UMI)
+    remove_N_reads: FALSE
+    # minq param
+    min_base_q: 20
+    # numbq param
+    max_bases_below_qual: 2
+
+read_structure:
+    # affects read_structure arguments in scpipe::sc_trim_barcode
+    # bs1 param
+    barcode_start_1: -1
+    # bl1 param
+    barcode_len_1: 0
+    # bs2 param
+    barcode_start_2: 6
+    # bl2 param
+    barcode_len_2: 7
+    # us param (read 2)
+    umi_start: 0
+    # ul param
+    umi_len: 6

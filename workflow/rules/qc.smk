@@ -11,6 +11,8 @@ rule fastQC:
     resources:
         mem_mb=8192,
         runtime='0-12:0:0',
+    log:
+        'logs/fastQC_{cell}.log'
     output:
         report1='results/fastQC/{cell}_R1_fastqc.html',
         report2='results/fastQC/{cell}_R2_fastqc.html',
@@ -31,6 +33,8 @@ rule fastqScreen:
     resources:
         mem_mb=8192,
         runtime='1-0:0:0',
+    log:
+        'logs/fastqScreen_{cell}.log'
     output:
         report3='results/fastqScreen/{cell}_R2_screen.html'
     shell:
@@ -59,6 +63,8 @@ rule multiQC:
     resources:
         mem_mb=65536,
         runtime='0-12:0:0'
+    log:
+        'logs/multiQC.log'
     output:
         'results/qc_metrics/multiqc_report.html'
     shell:

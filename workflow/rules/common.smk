@@ -41,3 +41,10 @@ def get_fastqscreen_output():
          cell=cells
     )
     return fastqscreen_output
+
+def get_trim_barcode_output():
+    trim_barcode_output = expand(
+        'results/trimmed/{cell}_combined.fastq.gz',
+         cell=cells
+    )
+    return trim_barcode_output
