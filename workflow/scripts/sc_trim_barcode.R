@@ -8,9 +8,6 @@ library(SingleCellExperiment)
 
 # Input params -----------------------------------------------------------------
 
-gtf <- snakemake@config[['ref']]['gtf']
-barcode_annotation <- snakemake@config[['sample_sheet']]
-
 fq_R1 <- snakemake@input[['r1']]
 fq_R2 <- snakemake@input[['r2']]
 
@@ -43,8 +40,6 @@ read_structure <- list(
 )
 
 # run scpipe's trimming --------------------------------------------------------
-
-save.image('test.RData')
 
 print(read_structure)
 print(combined_fq)

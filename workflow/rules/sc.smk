@@ -14,6 +14,6 @@ rule trim_barcode:
     log:
         'logs/trim-barcode_{cell}.log'
     output:
-        'results/trimmed/{cell}_S1_combined.fastq.gz'
+        'results/trimmed/{cell}_combined.fastq.gz'
     script:
         '../scripts/sc_trim_barcode.R'

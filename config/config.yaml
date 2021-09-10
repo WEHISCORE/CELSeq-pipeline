@@ -5,8 +5,10 @@ FastqScreen_config: config/fastq_screen.conf
 sample_sheet: metadata/samplesheet.csv
 
 ref:
-    # gene GTF reference
-    gtf: /stornext/Projects/score/Indexes/GRCh38.p13gencode.v35.primary_assembly.annotation.gtf
+    # gene GTF reference used by STAR
+    gtf: /stornext/Projects/score/Indexes/STAR/genes.gtf
+    # STAR index
+    star_index: /stornext/Projects/score/Indexes/STAR/GRCh38_STAR5idx_2-7-3a_noGTF
 
 filter_settings:
     # affects read filter settings passed to scpipe::sc_trim_barcode
@@ -33,3 +35,7 @@ read_structure:
     umi_start: 0
     # ul param
     umi_len: 6
+
+params:
+    # extra commandline parameters for STAR (optional)
+    star: '--limitBAMsortRAM 60000000000'

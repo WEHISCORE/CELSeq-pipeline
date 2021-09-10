@@ -13,6 +13,7 @@ report: 'report/workflow.rst'
 include: 'rules/common.smk'
 include: 'rules/qc.smk'
 include: 'rules/sc.smk'
+include: 'rules/align.smk'
 
 #------------- workflow ------------
 
@@ -22,3 +23,4 @@ rule all:
         get_fastqscreen_output(),
         'results/qc_metrics/multiqc_report.html',
         get_trim_barcode_output(),
+        get_align_output()

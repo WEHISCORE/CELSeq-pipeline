@@ -48,3 +48,10 @@ def get_trim_barcode_output():
          cell=cells
     )
     return trim_barcode_output
+
+def get_align_output():
+    align_output = expand(
+        'results/aligned/{cell}/AlignedSortedByCoord.out.bam',
+         cell=cells
+    )
+    return align_output
