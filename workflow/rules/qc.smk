@@ -2,8 +2,8 @@
 
 rule fastQC:
     input:
-        r1='fastq/{cell}_R1.fastq.gz',
-        r2='fastq/{cell}_R2.fastq.gz',
+        r1='fastq/{sample}_R1.fastq.gz',
+        r2='fastq/{sample}_R2.fastq.gz',
     envmodules:
         'fastqc/0.11.8',
     threads:
@@ -12,10 +12,10 @@ rule fastQC:
         mem_mb=8192,
         runtime='0-12:0:0',
     log:
-        'logs/fastQC_{cell}.log'
+        'logs/fastQC_{sample}.log'
     output:
-        report1='results/fastQC/{cell}_R1_fastqc.html',
-        report2='results/fastQC/{cell}_R2_fastqc.html',
+        report1='results/fastQC/{sample}_R1_fastqc.html',
+        report2='results/fastQC/{sample}_R2_fastqc.html',
     shell:
         '''
         fastqc -t {threads} {input.r1} {input.r2} -o results/fastQC
@@ -23,7 +23,7 @@ rule fastQC:
 
 rule fastqScreen:
     input:
-        r2='fastq/{cell}_R2.fastq.gz',
+        r2='fastq/{sample}_R2.fastq.gz',
     conda:
         '../envs/fastqscreen.yaml'
     envmodules:
@@ -34,9 +34,9 @@ rule fastqScreen:
         mem_mb=8192,
         runtime='1-0:0:0',
     log:
-        'logs/fastqScreen_{cell}.log'
+        'logs/fastqScreen_{sample}.log'
     output:
-        report3='results/fastqScreen/{cell}_R2_screen.html'
+        report3='results/fastqScreen/{sample}_R2_screen.html'
     shell:
         '''
         fastq_screen --conf {config[FastqScreen_config]} \
@@ -47,16 +47,16 @@ rule fastqScreen:
 rule multiQC:
     input:
         report3=expand(
-            'results/fastqScreen/{cell}_R2_screen.html',
-            cell=cells
+            'results/fastqScreen/{sample}_R2_screen.html',
+            sample=samples
         ),
         report1=expand(
-            'results/fastQC/{cell}_R1_fastqc.html',
-            cell=cells
+            'results/fastQC/{sample}_R1_fastqc.html',
+            sample=samples
         ),
         report2=expand(
-            'results/fastQC/{cell}_R2_fastqc.html',
-            cell=cells
+            'results/fastQC/{sample}_R2_fastqc.html',
+            sample=samples
         ),
     envmodules:
         'MultiQC/1.10.1',

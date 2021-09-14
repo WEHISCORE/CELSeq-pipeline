@@ -11,6 +11,7 @@ report: 'report/workflow.rst'
 #------------- load rules ------------
 
 include: 'rules/common.smk'
+include: 'rules/demultiplex.smk'
 include: 'rules/qc.smk'
 include: 'rules/sc.smk'
 include: 'rules/align.smk'
@@ -19,6 +20,8 @@ include: 'rules/align.smk'
 
 rule all:
     input:
+        get_bcl2fastq_output(),
+        get_mergelanes_output(),
         get_fastqc_output(),
         get_fastqscreen_output(),
         'results/qc_metrics/multiqc_report.html',

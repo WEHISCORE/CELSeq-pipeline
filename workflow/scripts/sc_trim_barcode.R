@@ -41,12 +41,6 @@ read_structure <- list(
 
 # run scpipe's trimming --------------------------------------------------------
 
-print(read_structure)
-print(combined_fq)
-print(fq_R1)
-print(fq_R2)
-print(filter_settings)
-
 sc_trim_barcode(combined_fq,
                 fq_R1,
                 fq_R2,
