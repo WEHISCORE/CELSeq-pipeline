@@ -1,3 +1,6 @@
+# if set to false, will process from fastq files
+process_from_bcl: False
+
 # config file for Fastq Screen
 FastqScreen_config: config/fastq_screen.conf
 

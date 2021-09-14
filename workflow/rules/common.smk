@@ -2,36 +2,33 @@ import pandas as pd
 import os
 from glob import iglob
 
-from sample_sheet import SampleSheet
-
-sample_sheet = SampleSheet(config['sample_sheet'])
-samples = ['%s_S%d' % (s.sample_name, idx + 1) for idx, s in enumerate(sample_sheet.samples)]
-
-lanes = int(config['lanes'])
-lanes = ['L%s' % str(lane).zfill(3) for lane in range(1, lanes + 1)]
-
-##------------- fastqs must be under directory called fastq ------------
-#fqs = iglob('fastq/*_R1.fastq.gz')
-#
-## Extract basename of full file path
-#base = [os.path.basename(i) for i in fqs]
-#
-##------------- extract fastq sample name ------------
-#samples = []
-#for f in base:
-#    samples.append(f.split('_R1')[0])
-#
-#print(
-#'''
-#INPUTS:
-##-------------------- SNAKEMAKE INPUTS --------------------
-#%s
-##----------------------------------------------------------
-#''' % ', '.join(samples)
-#)
-
 #------------- globals ------------
 READENDS = ['R1', 'R2']
+
+#------------- set up samples ------------
+process_from_bcl = bool(config['process_from_bcl'])
+
+if process_from_bcl:
+    # process sample sheet for bcl2fastq
+    from sample_sheet import SampleSheet
+
+    sample_sheet = SampleSheet(config['sample_sheet'])
+    samples = ['%s_S%d' % (s.sample_name, idx + 1) for idx, s in enumerate(sample_sheet.samples)]
+
+    lanes = int(config['lanes'])
+    lanes = ['L%s' % str(lane).zfill(3) for lane in range(1, lanes + 1)]
+
+else:
+    # in this case, we expect the fastq files to already exist
+    fqs = iglob('fastq/*_R1.fastq.gz')
+
+    # extract basename of full file path
+    base = [os.path.basename(i) for i in fqs]
+
+    # extract sample name
+    samples = []
+    for f in base:
+        samples.append(f.split('_R1')[0])
 
 #------------- output functions ------------
 def get_bcl2fastq_output():
