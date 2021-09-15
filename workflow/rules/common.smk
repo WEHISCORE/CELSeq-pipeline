@@ -73,7 +73,7 @@ def get_trim_barcode_output():
 
 def get_align_output():
     align_output = expand(
-        'results/aligned/{sample}/AlignedSortedByCoord.out.bam',
+        'results/aligned/{sample}/Aligned.sortedByCoord.out.bam',
          sample=samples
     )
     return align_output

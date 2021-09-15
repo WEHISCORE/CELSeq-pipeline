@@ -6,22 +6,29 @@ sink(log, type='message')
 library(scPipe)
 library(SingleCellExperiment)
 
-# Input params -----------------------------------------------------------------
-
-fq_R1 <- snakemake@input[['r1']]
-fq_R2 <- snakemake@input[['r2']]
+# input params -----------------------------------------------------------------
 
 fs = snakemake@config[['filter_settings']]
 rs = snakemake@config[['read_structure']]
 
+swap_reads <- as.logical(rs$barcode_in_r1)
+
+if (swap_reads) {
+    fq_R1 <- snakemake@input[['r2']]
+    fq_R2 <- snakemake@input[['r1']]
+} else {
+    fq_R1 <- snakemake@input[['r1']]
+    fq_R2 <- snakemake@input[['r2']]
+}
+
 outfile <- snakemake@output[[1]]
 outdir <- dirname(outfile)
 
-# Output files -----------------------------------------------------------------
+# output files -----------------------------------------------------------------
 
 combined_fq <- file.path(outdir, gsub('R[12]', 'combined', basename(fq_R1)))
 
-# set up settings --------------------------------------------------------------
+# process settings -------------------------------------------------------------
 
 filter_settings <- list(
     rmlow = as.logical(fs$remove_lowqual_reads),

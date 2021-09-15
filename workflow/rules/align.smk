@@ -9,7 +9,7 @@ rule align:
     log:
         'logs/align_{sample}.log'
     output:
-        'results/aligned/{sample}/AlignedSortedByCoord.out.bam'
+        'results/aligned/{sample}/Aligned.sortedByCoord.out.bam'
     params:
         index=config['ref']['star_index'],
         extra='--outSAMtype BAM SortedByCoordinate --sjdbGTFfile {gtf} {star_params}'.format(

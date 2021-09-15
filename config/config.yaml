@@ -31,6 +31,10 @@ filter_settings:
     max_bases_below_qual: 2
 
 read_structure:
+    # sets whether read 1 contains the barcode information
+    # note that everything will be reverse from scpipe's
+    # perspective (R1 = R2 and vice versa)
+    barcode_in_r1: TRUE
     # affects read_structure arguments in scpipe::sc_trim_barcode
     # bs1 param
     barcode_start_1: -1
@@ -40,7 +44,7 @@ read_structure:
     barcode_start_2: 6
     # bl2 param
     barcode_len_2: 7
-    # us param (read 2)
+    # us param
     umi_start: 0
     # ul param
     umi_len: 6
