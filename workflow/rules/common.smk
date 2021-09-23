@@ -77,3 +77,10 @@ def get_align_output():
          sample=samples
     )
     return align_output
+
+def get_exon_mapping_output():
+    exon_mapping_output = expand(
+        'results/exon_mapping/{sample}_exon_mapping.bam',
+         sample=samples
+    )
+    return exon_mapping_output

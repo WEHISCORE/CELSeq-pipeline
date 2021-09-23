@@ -4,7 +4,6 @@ sink(log)
 sink(log, type='message')
 
 library(scPipe)
-library(SingleCellExperiment)
 
 # input params -----------------------------------------------------------------
 
