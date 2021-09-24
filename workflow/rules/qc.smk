@@ -25,6 +25,7 @@ rule fastQC:
 
 rule fastqScreen:
     input:
+        r1='fastq/{sample}_R1.fastq.gz',
         r2='fastq/{sample}_R2.fastq.gz',
         config_file=config['FastqScreen_config'],
     conda:
@@ -39,26 +40,31 @@ rule fastqScreen:
     log:
         'logs/fastqScreen_{sample}.log'
     output:
-        report3='results/fastqScreen/{sample}_R2_screen.html'
+        report3='results/fastqScreen/{sample}_R1_screen.html',
+        report4='results/fastqScreen/{sample}_R2_screen.html'
     shell:
         '''
         fastq_screen --conf {input.config_file} \
             --outdir results/fastqScreen \
-            {input.r2}
+            {input.r1} {input.r2}
         '''
 
 rule multiQC:
     input:
-        report3=expand(
-            'results/fastqScreen/{sample}_R2_screen.html',
-            sample=samples
-        ),
         report1=expand(
             'results/fastQC/{sample}_R1_fastqc.html',
             sample=samples
         ),
         report2=expand(
             'results/fastQC/{sample}_R2_fastqc.html',
+            sample=samples
+        ),
+        report3=expand(
+            'results/fastqScreen/{sample}_R1_screen.html',
+            sample=samples
+        ),
+        report4=expand(
+            'results/fastqScreen/{sample}_R2_screen.html',
             sample=samples
         ),
     conda:

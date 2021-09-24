@@ -56,11 +56,11 @@ def get_fastqc_output():
     )
     return fastqc_output
 
-
 def get_fastqscreen_output():
     fastqscreen_output = expand(
-        'results/fastqScreen/{sample}_R2_screen.html',
-         sample=samples
+        'results/fastqScreen/{sample}_{readends}_screen.html',
+         sample=samples,
+         readends=READENDS
     )
     return fastqscreen_output
 
