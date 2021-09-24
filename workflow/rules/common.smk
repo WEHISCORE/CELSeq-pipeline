@@ -33,7 +33,7 @@ else:
 #------------- output functions ------------
 def get_bcl2fastq_output():
     bcl2fastq_output = expand(
-            'bcl_output/{sample}_{lane}_{readend}_001.fastq.gz',
+            'results/bcl_output/{sample}_{lane}_{readend}_001.fastq.gz',
             sample=samples,
             lane=lanes,
             readend=READENDS

@@ -4,6 +4,8 @@ rule fastQC:
     input:
         r1='fastq/{sample}_R1.fastq.gz',
         r2='fastq/{sample}_R2.fastq.gz',
+    conda:
+        '../envs/fastqc.yaml'
     envmodules:
         'fastqc/0.11.8',
     threads:
@@ -24,6 +26,7 @@ rule fastQC:
 rule fastqScreen:
     input:
         r2='fastq/{sample}_R2.fastq.gz',
+        config_file=config['FastqScreen_config'],
     conda:
         '../envs/fastqscreen.yaml'
     envmodules:
@@ -39,7 +42,7 @@ rule fastqScreen:
         report3='results/fastqScreen/{sample}_R2_screen.html'
     shell:
         '''
-        fastq_screen --conf {config[FastqScreen_config]} \
+        fastq_screen --conf {input.config_file} \
             --outdir results/fastqScreen \
             {input.r2}
         '''
@@ -58,6 +61,8 @@ rule multiQC:
             'results/fastQC/{sample}_R2_fastqc.html',
             sample=samples
         ),
+    conda:
+        '../envs/multiqc.yaml'
     envmodules:
         'MultiQC/1.10.1',
     resources:

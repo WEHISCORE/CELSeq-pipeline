@@ -3,7 +3,7 @@ rule bcl2fastq:
         samplesheet=config['sample_sheet']
     output:
         fastq=expand(
-            'bcl_output/{sample}_{lane}_{readend}_001.fastq.gz',
+            'results/bcl_output/{sample}_{lane}_{readend}_001.fastq.gz',
             sample=samples,
             lane=lanes,
             readend=READENDS
@@ -21,7 +21,7 @@ rule bcl2fastq:
         '''
         bcl2fastq \
             --runfolder-dir {config[bcl_input]} \
-            --output-dir bcl_output \
+            --output-dir results/bcl_output \
             --sample-sheet {input} \
             {config[params][bcl2fastq]}
         '''
@@ -29,7 +29,7 @@ rule bcl2fastq:
 rule mergelanes:
     input:
         fastq=[
-            'bcl_output/{sample}_{lane}_{readend}_001.fastq.gz'.format(
+            'results/bcl_output/{sample}_{lane}_{readend}_001.fastq.gz'.format(
                 sample=sample,
                 lane=lane,
                 readend=readend
@@ -43,4 +43,4 @@ rule mergelanes:
     log:
         'logs/mergelanes_{sample}_{readend}.log'
     shell:
-        'cat bcl_output/{wildcards.sample}_*_{wildcards.readend}_001.fastq.gz > {output}'
+        'cat results/bcl_output/{wildcards.sample}_*_{wildcards.readend}_001.fastq.gz > {output}'
