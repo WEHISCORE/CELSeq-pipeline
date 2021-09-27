@@ -29,7 +29,8 @@ if process_from_bcl:
             'results/qc_metrics/multiqc_report.html',
             get_trim_barcode_output(),
             get_align_output(),
-            get_exon_mapping_output()
+            get_exon_mapping_output(),
+            get_sc_demultiplex_output()
 
 else:
     rule all:
@@ -39,4 +40,5 @@ else:
             'results/qc_metrics/multiqc_report.html',
             get_trim_barcode_output(),
             get_align_output(),
-            get_exon_mapping_output()
+            get_exon_mapping_output(),
+            get_sc_demultiplex_output()

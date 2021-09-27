@@ -30,6 +30,10 @@ else:
     for f in base:
         samples.append(f.split('_R1')[0])
 
+#------------- get cells from barcode files ------------
+barcodes = pd.read_csv(config['barcode_file'])
+cells = barcodes.iloc[:, 0].values
+
 #------------- output functions ------------
 def get_bcl2fastq_output():
     bcl2fastq_output = expand(
@@ -84,3 +88,10 @@ def get_exon_mapping_output():
          sample=samples
     )
     return exon_mapping_output
+
+def get_sc_demultiplex_output():
+    sc_demultiplex_output = expand(
+        'results/sc_demultiplex/{sample}/stat/overall_stat.csv',
+         sample=samples,
+    )
+    return sc_demultiplex_output

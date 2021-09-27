@@ -11,6 +11,7 @@ rs <- snakemake@config[['read_structure']]
 inbam <- snakemake@input[['bam']]
 strand <- as.logical(snakemake@config[['strand']])
 gtf <- snakemake@config[['ref']][['gtf']]
+threads <- as.integer(snakemake@threads)
 
 # output files -----------------------------------------------------------------
 
@@ -40,4 +41,5 @@ sc_exon_mapping(
     bc_len = bc_len,
     barcode_vector = barcode_vector,
     UMI_len = UMI_len,
-    stnd = strand)
+    stnd = strand,
+    nthreads = threads)
