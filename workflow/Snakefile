@@ -30,7 +30,8 @@ if process_from_bcl:
             get_trim_barcode_output(),
             get_align_output(),
             get_exon_mapping_output(),
-            get_sc_demultiplex_output()
+            get_sc_demultiplex_output(),
+            get_sc_gene_counting_output()
 
 else:
     rule all:
@@ -41,4 +42,5 @@ else:
             get_trim_barcode_output(),
             get_align_output(),
             get_exon_mapping_output(),
-            get_sc_demultiplex_output()
+            get_sc_demultiplex_output(),
+            get_sc_gene_counting_output()

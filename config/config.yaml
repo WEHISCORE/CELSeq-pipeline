@@ -17,17 +17,33 @@ lanes: 4
 # col 1 contains the cell ID, col 2 is the barcode
 # NOTE: barcode will be trimmed to agree with
 # barcode_len parameter under read_structure
-barcodes: metadata/barcodes.csv
+#barcodes: metadata/barcodes.csv
+barcode_file: .test/barcode_anno.csv
+
+# max mismatches allowed in barcode
+# used by scPipe::sc_demultiplex
+max_barcode_mismatches: 1
+
+# mitochondrial chromosome name
+mito: MT
 
 # whether to perform strand-specific mapping
 # in scPipe's sc_exon_mapping
 strand: TRUE
 
+# sets UMI_cor argument in scPipe::sc_gene_counting
+correct_UMI_error: 1
+
+# sets gene_fl argument in scPipe:sc_gene_counting
+remove_low_abundance_genes: FALSE
+
 ref:
     # gene GTF reference used by STAR
-    gtf: /stornext/Projects/score/Indexes/GRCh38.p13/gencode.v35.primary_assembly.annotation.gtf
+    #gtf: /stornext/Projects/score/Indexes/GRCh38.p13/gencode.v35.primary_assembly.annotation.gtf
+    gtf: .test/ERCC92_anno.gff3
     # STAR index
-    star_index: /stornext/Projects/score/Indexes/STAR/GRCh38p13_with_ERCC_STAR-2-7-8a
+    #star_index: /stornext/Projects/score/Indexes/STAR/GRCh38p13_with_ERCC_STAR-2-7-8a
+    star_index: .test/ERCC92-STAR-index
 
 filter_settings:
     # affects read filter settings passed to scpipe::sc_trim_barcode
@@ -42,10 +58,10 @@ filter_settings:
 
 read_structure:
     # sets whether read 1 contains the barcode information
-    # note that everything will be reverse from scpipe's
+    # note that everything will be reverse from scPipe's
     # perspective (R1 = R2 and vice versa)
-    barcode_in_r1: TRUE
-    # affects read_structure arguments in scpipe::sc_trim_barcode
+    barcode_in_r1: FALSE
+    # affects read_structure arguments in scPipe::sc_trim_barcode
     # bs1 param
     barcode_start_1: -1
     # bl1 param

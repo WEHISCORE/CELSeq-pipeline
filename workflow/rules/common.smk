@@ -95,3 +95,10 @@ def get_sc_demultiplex_output():
          sample=samples,
     )
     return sc_demultiplex_output
+
+def get_sc_gene_counting_output():
+    sc_gene_counting_output = expand(
+        'results/sc_demultiplex/{sample}/gene_count.csv',
+         sample=samples,
+    )
+    return sc_gene_counting_output

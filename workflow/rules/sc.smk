@@ -52,3 +52,20 @@ rule sc_demultiplex:
         'logs/sc_demultiplex_{sample}.log'
     script:
         '../scripts/sc_demultiplex.R'
+
+rule sc_gene_counting:
+    input:
+        'results/sc_demultiplex/{sample}/stat/overall_stat.csv'
+    output:
+        'results/sc_demultiplex/{sample}/gene_count.csv'
+    conda:
+        '../envs/scpipe.yaml'
+    threads:
+        1
+    resources:
+        mem_mb=8192,
+        runtime='0-2:0:0',
+    log:
+        'logs/sc_gene_counting_{sample}.log'
+    script:
+        '../scripts/sc_gene_counting.R'
