@@ -34,9 +34,9 @@ read_structure <- list(
 bc <- read.delim(bc_file, sep=',')
 barcode_len <- max(read_structure$bl1,
                    read_structure$bl2)
-file_bc_len <- length(bc[1, 2])
+file_bc_len <- nchar(bc[1, 2])
 
-if (length(file_bc_len) > barcode_len) {
+if (file_bc_len > barcode_len) {
     print('Writing trimmed barcode file.')
 
     bc[, 2] <- substr(bc$Cell_Barcode, 1, barcode_len)
