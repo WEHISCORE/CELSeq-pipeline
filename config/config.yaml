@@ -37,6 +37,14 @@ correct_UMI_error: 1
 # sets gene_fl argument in scPipe:sc_gene_counting
 remove_low_abundance_genes: FALSE
 
+# used by scPipe::create_sce_by_dir
+# must be an element of biomaRt::listDatasets()
+organism: hsapiens_gene_ensembl
+
+# used by scPipe::create_sce_by_dir
+# must be an element of biomaRt::listAttributes()
+gene_id_type: ensembl_gene_id
+
 ref:
     # gene GTF reference used by STAR
     #gtf: /stornext/Projects/score/Indexes/GRCh38.p13/gencode.v35.primary_assembly.annotation.gtf

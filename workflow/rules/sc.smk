@@ -64,8 +64,27 @@ rule sc_gene_counting:
         1
     resources:
         mem_mb=8192,
-        runtime='0-2:0:0',
+        runtime='0-6:0:0',
     log:
         'logs/sc_gene_counting_{sample}.log'
     script:
         '../scripts/sc_gene_counting.R'
+
+
+rule create_sce_object:
+    input:
+        ['results/sc_demultiplex/{sample}/gene_count.csv'.format(
+            sample=sample) for sample in samples]
+    output:
+        'results/sce_object/sce.rds'
+    conda:
+        '../envs/scpipe.yaml'
+    threads:
+        16
+    resources:
+        mem_mb=16384,
+        runtime='0-6:0:0'
+    log:
+        'logs/create_sce_object.log'
+    script:
+        '../scripts/create_sce_object.R'
