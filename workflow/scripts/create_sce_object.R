@@ -7,26 +7,21 @@ library(scPipe)
 
 # input params -----------------------------------------------------------------
 
-dirs <- lapply(snakemake@input, dirname)
-print(dirs)
+datadir <- dirname(snakemake@input[[1]])
+datadir <- file.path(getwd(), datadir) # need absolute path
 
 organism <- snakemake@config[['organism']]
 gene_id_type <- snakemake@config[['gene_id_type']]
 
-threads <- as.integer(snakemake@threads)
 outfile <- snakemake@output[[1]]
 
-# create SCE objects from dirs -------------------------------------------------
-sce_list <- mclapply(dirs, function(dir) {
-                create_sce_by_dir(
-                    datadir = dir,
-                    organism = organism,
-                    pheno_data = NULL,
-                    report = FALSE)
-                },
-                mc.cores = threads)
-
-sce <- Reduce(function(x, y) .combine(x, y, rowData_by = NULL), sce_list)
+# create SCE objects from dir --------------------------------------------------
+sce <- create_sce_by_dir(
+        datadir = datadir,
+        organism = organism,
+        gene_id_type = gene_id_type,
+        pheno_data = NULL,
+        report = FALSE)
 
 # write R output ---------------------------------------------------------------
 saveRDS(

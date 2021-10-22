@@ -32,7 +32,7 @@ if process_from_bcl:
             get_exon_mapping_output(),
             get_sc_demultiplex_output(),
             get_sc_gene_counting_output(),
-            'results/sce_object/sce.rds'
+            get_create_sce_object_output()
 
 else:
     rule all:
@@ -45,4 +45,4 @@ else:
             get_exon_mapping_output(),
             get_sc_demultiplex_output(),
             get_sc_gene_counting_output(),
-            'results/sce_object/sce.rds'
+            get_create_sce_object_output()

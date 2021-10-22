@@ -102,3 +102,10 @@ def get_sc_gene_counting_output():
          sample=samples,
     )
     return sc_gene_counting_output
+
+def get_create_sce_object_output():
+    create_sce_object_output = expand(
+        'results/sc_demultiplex/{sample}/sce.rds',
+         sample=samples,
+    )
+    return create_sce_object_output

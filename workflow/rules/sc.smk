@@ -73,18 +73,17 @@ rule sc_gene_counting:
 
 rule create_sce_object:
     input:
-        ['results/sc_demultiplex/{sample}/gene_count.csv'.format(
-            sample=sample) for sample in samples]
+        'results/sc_demultiplex/{sample}/gene_count.csv'
     output:
-        'results/sce_object/sce.rds'
+        'results/sc_demultiplex/{sample}/sce.rds'
     conda:
         '../envs/scpipe.yaml'
     threads:
-        16
+        1
     resources:
         mem_mb=16384,
         runtime='0-6:0:0'
     log:
-        'logs/create_sce_object.log'
+        'logs/create_sce_object_{sample}.log'
     script:
         '../scripts/create_sce_object.R'
