@@ -28,8 +28,7 @@ cd CELSeq-pipeline
 If you would like to test the pipeline, first download the test data:
 
 ```
-cd .test
-./download_test_data.sh
+(cd .test && ./download_test_data.sh)
 ```
 
 Now run as follows:
