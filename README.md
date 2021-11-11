@@ -68,7 +68,7 @@ If you want to submit your jobs to the cluster using SLURM, use the following to
 
 ```
 conda activate snakemake
-snakemake --use-conda --conda-frontend mamba --profile slurm --jobs 8 --cores 2
+snakemake --use-conda --conda-frontend mamba --profile slurm --jobs 8 --cores 24
 ```
 
 The pipeline will generate all results under a `results` directory. The final output will be under `results/sc_demultiplex/{sample}/sce.rds`. 
