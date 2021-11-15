@@ -25,13 +25,28 @@ cd CELSeq-pipeline
 
 ### Testing ###
 
-If you would like to test the pipeline, first download the test data:
+If you would like to test the pipeline, first download and prepare the test data:
 
 ```
 (cd .test && ./download_test_data.sh)
+mkdir -p fastq && ln -s $PWD/.test/*fastq.gz fastq
 ```
 
-Now run as follows:
+You'll now have to generate a STAR index for the test genome:
+
+```
+mamba install -c conda-forge -c bioconda star=2.7.8a
+STAR --runMode genomeGenerate --genomeDir ./test/ERCC92-STAR-index --genomeFastaFiles ./test/ERCC92.fa
+```
+
+And a Bowtie index for FastQ Screen:
+
+```
+mamba install -c conda-forge -c bioconda bowtie2=2.4.2
+bowtie2-build .test/ERCC92.fa .test/ERCC-bowtie-index/ERCC
+```
+
+Make sure your `config/config.yaml` and `config/fastq_screen.conf` reflect these paths (you can comment out other indexes in the FastQ Screen config). Now run as follows:
 
 ```
 snakemake --use-conda --conda-frontend mamba --cores 1
@@ -52,7 +67,7 @@ S2,GCGCGCGC
 - `gtf` and `star_index` under `ref` -- make sure the chromosome names match for these and that you've generated an index for STAR-2.7.8, as this is the version used by the pipeline.
 - `read_structure` -- ensure `barcode_in_r1` is set to `TRUE` if your barcodes are in R1 (which is standard for CEL-Seq). WEHI's modified CEL-Seq protocol uses a barcode size of 7 (`barcode_len_2` default), so set this to 8 if using a standard version of the protocol.
 
-If you are running from BCL, make sure you put your BCL files under the `bcl_input` directory, and if running from fastqs, put them all under a `fastq` directory from where you run the pipeline.
+If you are running from BCL, make sure you put your BCL files under the `bcl_input` directory, and if running from fastqs, put them all under a `fastq` directory from where you run the pipeline and make sure that your files are in the format `fastq/{sample}_R1.fastq.gz` and `fastq/{sample}_R2.fastq.gz`.
 
 ### Running ###
 
