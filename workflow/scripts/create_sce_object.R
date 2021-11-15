@@ -23,8 +23,14 @@ sce <- create_sce_by_dir(
         pheno_data = NULL,
         report = FALSE)
 
+# save counts as sparse matrix
+assay(sce, withDimnames = FALSE) <- as(
+    assay(sce, withDimnames = FALSE),
+    'dgCMatrix')
+
 # write R output ---------------------------------------------------------------
 saveRDS(
     sce,
-    outfile
+    outfile,
+    compress = 'xz'
 )
