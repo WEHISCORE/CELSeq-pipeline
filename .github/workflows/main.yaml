@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
     - uses: actions/checkout@v1
     - name: Formatting
       uses: github/super-linter@v4
@@ -22,11 +23,17 @@ jobs:
         VALIDATE_SNAKEMAKE_SNAKEFMT: true
 
   linting:
-    
+
     runs-on: ubuntu-latest
-      
+
     steps:
+
     - uses: actions/checkout@v1
+    - name: Download test data
+      working-directory: .test
+      run: |
+        bash download_test_data.sh
+
     - name: Linting
       uses: snakemake/snakemake-github-action@v1.22.0
       with:
@@ -41,6 +48,7 @@ jobs:
     needs:
       - linting
       - formatting
+
     steps:
 
     - name: Checkout repository
