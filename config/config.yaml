@@ -17,8 +17,7 @@ lanes: 4
 # col 1 contains the cell ID, col 2 is the barcode
 # NOTE: barcode will be trimmed to agree with
 # barcode_len parameter under read_structure
-#barcodes: metadata/barcodes.csv
-barcode_file: .test/barcode_anno.csv
+barcode_file: metadata/barcode_anno.csv
 
 # max mismatches allowed in barcode
 # used by scPipe::sc_demultiplex
@@ -47,11 +46,11 @@ gene_id_type: ensembl_gene_id
 
 ref:
     # gene GTF reference used by STAR
-    #gtf: /stornext/Projects/score/Indexes/GRCh38.p13/gencode.v35.primary_assembly.annotation.gtf
-    gtf: .test/ERCC92_anno.gff3
-    # STAR index
-    #star_index: /stornext/Projects/score/Indexes/STAR/GRCh38p13_with_ERCC_STAR-2-7-8a
-    star_index: .test/ERCC92-STAR-index
+    gtf: ref/ERCC92_anno.gff3
+    # STAR index -- will be built if it doesn't exist
+    star_index: ref/ERCC92-STAR-index
+    # fasta only required if no STAR index exists
+    fasta: ref/ERCC92.fa
 
 filter_settings:
     # affects read filter settings passed to scpipe::sc_trim_barcode
@@ -77,7 +76,7 @@ read_structure:
     # bs2 param
     barcode_start_2: 6
     # bl2 param
-    barcode_len_2: 7
+    barcode_len_2: 8
     # us param
     umi_start: 0
     # ul param
@@ -85,7 +84,7 @@ read_structure:
 
 params:
     # extra commandline parameters for STAR (optional)
-    star: '--limitBAMsortRAM 60000000000'
+    star: --limitBAMsortRAM 60000000000
 
     # extra commandline parameters for bcl2fastq (optional)
     bcl2fastq: >

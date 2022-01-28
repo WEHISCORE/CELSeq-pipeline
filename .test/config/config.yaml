@@ -1,0 +1,95 @@
+# if set to false, will process from fastq files
+process_from_bcl: False
+
+# config file for Fastq Screen
+FastqScreen_config: config/fastq_screen.conf
+
+# sample sheet for bcl2fastq conversion
+sample_sheet: bcl_input/SampleSheet.csv
+
+# directory with raw bcl data
+bcl_input: bcl_input
+
+# number of sequencing lanes
+lanes: 4
+
+# csv file containing cell barcode information
+# col 1 contains the cell ID, col 2 is the barcode
+# NOTE: barcode will be trimmed to agree with
+# barcode_len parameter under read_structure
+barcode_file: metadata/barcode_anno.csv
+
+# max mismatches allowed in barcode
+# used by scPipe::sc_demultiplex
+max_barcode_mismatches: 1
+
+# mitochondrial chromosome name
+mito: MT
+
+# whether to perform strand-specific mapping
+# in scPipe's sc_exon_mapping
+strand: TRUE
+
+# sets UMI_cor argument in scPipe::sc_gene_counting
+correct_UMI_error: 1
+
+# sets gene_fl argument in scPipe:sc_gene_counting
+remove_low_abundance_genes: FALSE
+
+# used by scPipe::create_sce_by_dir
+# must be an element of biomaRt::listDatasets()
+organism: hsapiens_gene_ensembl
+
+# used by scPipe::create_sce_by_dir
+# must be an element of biomaRt::listAttributes()
+gene_id_type: ensembl_gene_id
+
+ref:
+    # gene GTF reference used by STAR
+    gtf: ref/ERCC92_anno.gff3
+    # STAR index -- will be built if it doesn't exist
+    star_index: ref/ERCC92-STAR-index
+    # fasta only required if no STAR index exists
+    fasta: ref/ERCC92.fa
+
+filter_settings:
+    # affects read filter settings passed to scpipe::sc_trim_barcode
+    # rmlow param
+    remove_lowqual_reads: TRUE
+    # rmN param (remove reads with Ns in barcode or UMI)
+    remove_N_reads: FALSE
+    # minq param
+    min_base_q: 20
+    # numbq param
+    max_bases_below_qual: 2
+
+read_structure:
+    # sets whether read 1 contains the barcode information
+    # note that everything will be reverse from scPipe's
+    # perspective (R1 = R2 and vice versa)
+    barcode_in_r1: FALSE
+    # affects read_structure arguments in scPipe::sc_trim_barcode
+    # bs1 param
+    barcode_start_1: -1
+    # bl1 param
+    barcode_len_1: 0
+    # bs2 param
+    barcode_start_2: 6
+    # bl2 param
+    barcode_len_2: 8
+    # us param
+    umi_start: 0
+    # ul param
+    umi_len: 6
+
+params:
+    # extra commandline parameters for STAR (optional)
+    star: --limitBAMsortRAM 60000000000
+
+    # extra commandline parameters for bcl2fastq (optional)
+    bcl2fastq: >
+        --mask-short-adapter-reads 5
+         --minimum-trimmed-read-length 5
+         --loading-theads 4
+         --writing-threads 4
+         --processing-theads 14
