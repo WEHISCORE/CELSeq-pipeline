@@ -17,6 +17,7 @@ rule index:
 rule align:
     input:
         fq1="results/trimmed/{sample}_combined.fastq.gz",
+        index=config["ref"]["star_index"],
     output:
         "results/aligned/{sample}/Aligned.sortedByCoord.out.bam",
     log:
