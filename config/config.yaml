@@ -47,7 +47,7 @@ gene_id_type: ensembl_gene_id
 ref:
     # gene GTF reference used by STAR
     gtf: ref/ERCC92_anno.gff3
-    # STAR index -- will be built if it doesn't exist
+    # STAR index -- will be built if it doesn't exist at this location
     star_index: ref/ERCC92-STAR-index
     # fasta only required if no STAR index exists
     fasta: ref/ERCC92.fa

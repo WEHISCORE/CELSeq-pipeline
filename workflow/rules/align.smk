@@ -27,7 +27,7 @@ rule align:
         mem_mb=65536,
         runtime="0-12:0:0",
     params:
-        index=config["ref"]["star_index"],
+        index=lambda w, input: "".join(os.path.splitext(input[1])),  # hack, otherwise linter complains
         extra="--outSAMtype BAM SortedByCoordinate --sjdbGTFfile {gtf} {star_params}".format(
             gtf=config["ref"]["gtf"], star_params=config["params"]["star"]
         ),
