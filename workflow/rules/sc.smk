@@ -11,10 +11,10 @@ rule trim_barcode:
         "logs/trim-barcode_{sample}.log",
     conda:
         "../envs/scpipe.yaml"
-    threads: 1
+    threads: cluster["trimbarcode"]["threads"]
     resources:
-        mem_mb=8192,
-        runtime="0-2:0:0",
+        mem_mb=cluster["trimbarcode"]["mem_mb"],
+        runtime=cluster["trimbarcode"]["runtime"],
     script:
         "../scripts/sc_trim_barcode.R"
 
@@ -28,10 +28,10 @@ rule exon_mapping:
         "logs/exon_mapping_{sample}.log",
     conda:
         "../envs/scpipe.yaml"
-    threads: 16
+    threads: cluster["exonmapping"]["threads"]
     resources:
-        mem_mb=32768,
-        runtime="0-12:0:0",
+        mem_mb=cluster["exonmapping"]["mem_mb"],
+        runtime=cluster["exonmapping"]["runtime"],
     script:
         "../scripts/sc_exon_mapping.R"
 
@@ -45,10 +45,10 @@ rule sc_demultiplex:
         "logs/sc_demultiplex_{sample}.log",
     conda:
         "../envs/scpipe.yaml"
-    threads: 1
+    threads: cluster["scdemux"]["threads"]
     resources:
-        mem_mb=8192,
-        runtime="0-12:0:0",
+        mem_mb=cluster["scdemux"]["mem_mb"],
+        runtime=cluster["scdemux"]["runtime"],
     script:
         "../scripts/sc_demultiplex.R"
 
@@ -62,10 +62,10 @@ rule sc_gene_counting:
         "logs/sc_gene_counting_{sample}.log",
     conda:
         "../envs/scpipe.yaml"
-    threads: 1
+    threads: cluster["scgenecounting"]["threads"]
     resources:
-        mem_mb=8192,
-        runtime="0-6:0:0",
+        mem_mb=cluster["scgenecounting"]["mem_mb"],
+        runtime=cluster["scgenecounting"]["runtime"],
     script:
         "../scripts/sc_gene_counting.R"
 
@@ -79,9 +79,9 @@ rule create_sce_object:
         "logs/create_sce_object_{sample}.log",
     conda:
         "../envs/scpipe.yaml"
-    threads: 1
+    threads: cluster["createsceobject"]["threads"]
     resources:
-        mem_mb=16384,
-        runtime="0-6:0:0",
+        mem_mb=cluster["createsceobject"]["mem_mb"],
+        runtime=cluster["createsceobject"]["runtime"],
     script:
         "../scripts/create_sce_object.R"

@@ -1,0 +1,59 @@
+bcl2fastq:
+    threads: 16
+    mem_mb: 98304
+    runtime: '0-12:0:0'
+
+mergelanes:
+    threads: 1
+    mem_mb: 12288
+    runtime: '0-2:0:0'
+
+fastqc:
+    threads: 2
+    mem_mb: 8192
+    runtime: '0-12:0:0'
+
+fastqscreen:
+    threads: 8
+    mem_mb: 32768
+    runtime: '1-0:0:0'
+
+multiqc:
+    threads: 1
+    mem_mb: 65536
+    runtime: '0-12:0:0'
+
+index:
+    threads: 24
+    mem_mb: 36864
+    runtime: '0-12:0:0'
+
+align:
+    threads: 24
+    mem_mb: 36864
+    runtime: '0-12:0:0'
+
+trimbarcode:
+    threads: 1
+    mem_mb: 8192
+    runtime: '0-12:0:0'
+
+exonmapping:
+    threads: 16
+    mem_mb: 32768
+    runtime: '0-12:0:0'
+
+scdemux:
+    threads: 1
+    mem_mb: 8192
+    runtime: '0-12:0:0'
+
+scgenecounting:
+    threads: 1
+    mem_mb: 8192
+    runtime: '0-6:0:0'
+        
+createsceobject:
+    threads: 1
+    mem_mb: 16384
+    runtime: '0-6:0:0'

@@ -1,9 +1,17 @@
 import pandas as pd
 import os
+import yaml
 from glob import iglob
 
 # ------------- globals ------------
 READENDS = ["R1", "R2"]
+
+# ------------- load cluster config ------------
+with open("config/cluster.yaml", "r") as stream:
+    try:
+        cluster = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc, file=sys.stderr)
 
 # ------------- set up samples ------------
 process_from_bcl = bool(config["process_from_bcl"])

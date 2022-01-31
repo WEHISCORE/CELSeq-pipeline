@@ -6,10 +6,10 @@ rule index:
         directory(config["ref"]["star_index"]),
     log:
         "logs/index.log",
-    threads: 24
+    threads: cluster["index"]["threads"]
     resources:
-        mem_mb=65536,
-        runtime="0-12:0:0",
+        mem_mb=cluster["index"]["mem_mb"],
+        runtime=cluster["index"]["runtime"],
     wrapper:
         "0.77.0/bio/star/index"
 
@@ -22,10 +22,10 @@ rule align:
         "results/aligned/{sample}/Aligned.sortedByCoord.out.bam",
     log:
         "logs/align_{sample}.log",
-    threads: 24
+    threads: cluster["align"]["threads"]
     resources:
-        mem_mb=65536,
-        runtime="0-12:0:0",
+        mem_mb=cluster["align"]["mem_mb"],
+        runtime=cluster["align"]["runtime"],
     params:
         index=lambda w, input: "".join(os.path.splitext(input[1])),  # hack, otherwise linter complains
         extra="--outSAMtype BAM SortedByCoordinate --sjdbGTFfile {gtf} {star_params}".format(

@@ -8,14 +8,14 @@ rule bcl2fastq:
             lane=lanes,
             readend=READENDS,
         ),
-    envmodules:
-        "bcl2fastq/2.20.0",
-    threads: 16
-    resources:
-        mem_mb=98304,
-        runtime="0-12:0:0",
     log:
         "logs/bcl2fastq.log",
+    envmodules:
+        "bcl2fastq/2.20.0",
+    threads: cluster["bcl2fastq"]["threads"]
+    resources:
+        mem_mb=cluster["bcl2fastq"]["mem_mb"],
+        runtime=cluster["bcl2fastq"]["runtime"],
     shell:
         """
         bcl2fastq \
@@ -36,10 +36,11 @@ rule mergelanes:
         ],
     output:
         "fastq/{sample}_{readend}.fastq.gz",
-    resources:
-        mem_mb=12288,
-        runtime="0-2:0:0",
     log:
         "logs/mergelanes_{sample}_{readend}.log",
+    threads: cluster["mergelanes"]["threads"]
+    resources:
+        mem_mb=cluster["mergelanes"]["mem_mb"],
+        runtime=cluster["mergelanes"]["runtime"],
     shell:
         "cat results/bcl_output/{wildcards.sample}_*_{wildcards.readend}_001.fastq.gz > {output}"
