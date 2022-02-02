@@ -5,7 +5,7 @@ process_from_bcl: False
 FastqScreen_config: config/fastq_screen.conf
 
 # sample sheet for bcl2fastq conversion
-sample_sheet: bcl_input/SampleSheet.csv
+bcl_sample_sheet: bcl_input/SampleSheet.csv
 
 # directory with raw bcl data
 bcl_input: bcl_input
@@ -13,10 +13,18 @@ bcl_input: bcl_input
 # number of sequencing lanes
 lanes: 4
 
+# Sample sheet containing experiment metadata.
+# Will be used to generate a barcode file if
+# one doesn't exist.
+# See README for more file format details.
+sample_sheet: metadata/sample_sheet.csv
+
 # csv file containing cell barcode information
 # col 1 contains the cell ID, col 2 is the barcode
 # NOTE: barcode will be trimmed to agree with
 # barcode_len parameter under read_structure
+# Will be automatically generated if a valid
+# sample sheet is present.
 barcode_file: metadata/barcode_anno.csv
 
 # max mismatches allowed in barcode

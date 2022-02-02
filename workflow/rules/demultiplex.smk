@@ -1,6 +1,6 @@
 rule bcl2fastq:
     input:
-        samplesheet=config["sample_sheet"],
+        samplesheet=config["bcl_sample_sheet"],
     output:
         fastq=expand(
             "results/bcl_output/{sample}_{lane}_{readend}_001.fastq.gz",

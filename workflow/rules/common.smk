@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 import os
+import sys
 import yaml
 from glob import iglob
 
@@ -20,10 +22,10 @@ if process_from_bcl:
     # process sample sheet for bcl2fastq
     from sample_sheet import SampleSheet
 
-    sample_sheet = SampleSheet(config["sample_sheet"])
+    bcl_sample_sheet = SampleSheet(config["bcl_sample_sheet"])
     samples = [
         "%s_S%d" % (s.sample_name, idx + 1)
-        for idx, s in enumerate(sample_sheet.samples)
+        for idx, s in enumerate(bcl_sample_sheet.samples)
     ]
 
     lanes = int(config["lanes"])
@@ -41,9 +43,33 @@ else:
     for f in base:
         samples.append(f.split("_R1")[0])
 
-# ------------- get cells from barcode files ------------
-barcodes = pd.read_csv(config["barcode_file"])
-cells = barcodes.iloc[:, 0].values
+# ------------- set up barcode annotation file ------------
+barcode_exists = os.path.exists(config["barcode_file"])
+sample_sheet_exists = os.path.exists(config["sample_sheet"])
+
+if not barcode_exists and sample_sheet_exists:
+    # if barcode file doesn't exist, create it from sample sheet
+    sample_sheet = pd.read_csv(config["sample_sheet"], sep=",")
+    barcode_col = ["primer_name" in col for col in sample_sheet.columns]
+    barcode_col = sample_sheet.columns[barcode_col].values
+
+    if len(barcode_col) != 1:
+        print("Multiple barcode fields detected.", file=sys.stderr)
+        sys.exit()
+
+    cell_ids = sample_sheet.iloc[:, 0].values
+    barcodes = sample_sheet[barcode_col].iloc[:, 0].values
+
+    if len(barcodes) != len(np.unique(barcodes)):
+        print("Barcodes in sample sheet are not unique.", file=sys.stderr)
+        sys.exit()
+
+    barcode_df = pd.DataFrame.from_dict({"cell_id": cell_ids, "barcode": barcodes})
+    barcode_df.to_csv(config["barcode_file"], sep=",", index=False)
+
+elif not barcode_exists and not sample_sheet_exists:
+    print("Neither barcode file or sample sheet was found!", file=sys.stderr)
+    sys.exit()
 
 # ------------- output functions ------------
 def get_bcl2fastq_output():
