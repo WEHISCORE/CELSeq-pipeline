@@ -12,15 +12,23 @@ datadir <- file.path(getwd(), datadir) # need absolute path
 
 organism <- snakemake@config[['organism']]
 gene_id_type <- snakemake@config[['gene_id_type']]
+pheno_data_file <- snakemake@config[['sample_sheet']]
 
 outfile <- snakemake@output[[1]]
+
+if (file.exists(pheno_data_file)) {
+    pheno_data <- read.delim(pheno_data_file, sep=',')
+} else {
+    pheno_data <- NULL
+    print('WARNING: Sample sheet not found. Unable to add phenotype data.')
+}
 
 # create SCE objects from dir --------------------------------------------------
 sce <- create_sce_by_dir(
         datadir = datadir,
         organism = organism,
         gene_id_type = gene_id_type,
-        pheno_data = NULL,
+        pheno_data = pheno_data,
         report = FALSE)
 
 # save counts as sparse matrix
