@@ -45,6 +45,7 @@ if process_from_bcl:
             get_sc_demultiplex_output(),
             get_sc_gene_counting_output(),
             get_create_sce_object_output(),
+            get_create_report_output(),
 
 
 else:
@@ -60,3 +61,4 @@ else:
             get_sc_demultiplex_output(),
             get_sc_gene_counting_output(),
             get_create_sce_object_output(),
+            get_create_report_output(),

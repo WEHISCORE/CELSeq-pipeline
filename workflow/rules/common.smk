@@ -150,3 +150,11 @@ def get_create_sce_object_output():
         sample=samples,
     )
     return create_sce_object_output
+
+
+def get_create_report_output():
+    create_report_output = expand(
+        "results/sc_demultiplex/{sample}/report.html",
+        sample=samples,
+    )
+    return create_report_output
