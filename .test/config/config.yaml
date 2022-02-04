@@ -46,7 +46,7 @@ remove_low_abundance_genes: FALSE
 
 # used by scPipe::create_sce_by_dir
 # must be an element of biomaRt::listDatasets()
-organism: hsapiens_gene_ensembl
+organism: mmusculus_gene_ensembl
 
 # used by scPipe::create_sce_by_dir
 # must be an element of biomaRt::listAttributes()

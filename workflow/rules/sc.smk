@@ -91,7 +91,7 @@ rule create_report:
     input:
         r1="fastq/{sample}_R1.fastq.gz",
         r2="fastq/{sample}_R2.fastq.gz",
-        rds="results/sc_demultiplex/{sample}/sce.rds",
+        counts="results/sc_demultiplex/{sample}/gene_count.csv",
         trimfq="results/trimmed/{sample}_combined.fastq.gz",
         align_bam="results/aligned/{sample}/Aligned.sortedByCoord.out.bam",
         map_bam="results/exon_mapping/{sample}_exon_mapping.bam",
