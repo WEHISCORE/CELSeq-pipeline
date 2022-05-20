@@ -2,7 +2,7 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - bioconductor-scpipe =1.14.0-0
+  - bioconductor-scpipe=1.16.0
   - bioconductor-scran
   - r-knitr
   - r-rmarkdown
