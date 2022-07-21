@@ -27,6 +27,10 @@ run_qc: True
 # See README for more file format details.
 sample_sheet: metadata/sample_sheet.csv
 
+# column name containing index sequence
+# in sample sheet
+primer_column: rd1_index_sequence
+
 # csv file containing cell barcode information
 # col 1 contains the cell ID, col 2 is the barcode
 # NOTE: barcode will be trimmed to agree with

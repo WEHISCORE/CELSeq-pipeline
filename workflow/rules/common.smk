@@ -87,9 +87,14 @@ barcode_exists = os.path.exists(config["barcode_file"])
 sample_sheet_exists = os.path.exists(config["sample_sheet"])
 
 if not barcode_exists and sample_sheet_exists:
+    primer_column = config["primer_column"]
+    if primer_column is None or primer_column == "":
+        print("Please specify primer column name.", file=sys.stderr)
+        sys.exit()
+
     # if barcode file doesn't exist, create it from sample sheet
     sample_sheet = pd.read_csv(config["sample_sheet"], sep=",")
-    barcode_col = ["primer_name" in col for col in sample_sheet.columns]
+    barcode_col = [primer_column in col for col in sample_sheet.columns]
     barcode_col = sample_sheet.columns[barcode_col].values
 
     if len(barcode_col) != 1:
