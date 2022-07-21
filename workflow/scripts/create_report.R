@@ -4,6 +4,7 @@ sink(log)
 sink(log, type='message')
 
 library(scPipe)
+library(tools)
 
 options(error = quote({dump.frames(); save.image(file = "last.dump.rda")}))
 
@@ -20,7 +21,8 @@ align_bam <- snakemake@input[['align_bam']]
 map_bam <- snakemake@input[['map_bam']]
 
 genome_index <- snakemake@config[['ref']][['star_index']]
-exon_anno <- snakemake@config[['ref']][['gtf']]
+gtf <- snakemake@config[['ref']][['gtf']]
+ercc <- system.file("extdata", "ERCC92_anno.gff3", package = "scPipe")
 strand <- as.logical(snakemake@config[['strand']])
 bc_file <- snakemake@config[['barcode_file']]
 
@@ -62,6 +64,32 @@ filter_settings <- list(
 # assume plate name is first part of sample name
 plate <- strsplit(basename(outfq), '_')[[1]][1]
 
+# if gene reference is in GFF format, create SAF, based on code by Peter Hickey
+# https://github.com/WEHISCORE/C122_Clucas/blob/14a13ec1b10b2d42976fd08784e5b47ea2429d59/code/scPipe.R
+anno <- NULL
+if (file_ext(gtf) == "gff") {
+    gr <- rtracklayer::import(gtf)
+    exon_gr <- gr[gr$type == "exon"]
+    saf <- data.frame(
+        GeneID = sapply(exon_gr$Parent, "[[", 1),
+        Chr = seqnames(exon_gr),
+        Start = start(exon_gr),
+        End = end(exon_gr),
+        Strand = strand(exon_gr))
+
+    ercc_gr <- rtracklayer::import(ercc)
+    ercc_exon_gr <- ercc_gr[ercc_gr$type == "exon"]
+    ercc_saf <- data.frame(
+        GeneID = ercc_exon_gr$Name,
+        Chr = seqnames(ercc_exon_gr),
+        Start = start(ercc_exon_gr),
+        End = end(ercc_exon_gr),
+        Strand = strand(ercc_exon_gr))
+    anno <- rbind(saf, ercc_saf)
+} else {
+    anno <- c(gtf, ercc)
+}
+
 # modify test data, otherwise report crashes -----------------------------------
 
 test_dir <- '.test/results/sc_demultiplex/simu'
@@ -97,7 +125,7 @@ create_report(
     align_bam = align_bam,
     genome_index = genome_index,
     map_bam = map_bam,
-    exon_anno = exon_anno,
+    exon_anno = anno,
     stnd = strand,
     fix_chr = fix_chr,
     barcode_anno = bc_file,
