@@ -64,31 +64,7 @@ filter_settings <- list(
 # assume plate name is first part of sample name
 plate <- strsplit(basename(outfq), '_')[[1]][1]
 
-# if gene reference is in GFF format, create SAF, based on code by Peter Hickey
-# https://github.com/WEHISCORE/C122_Clucas/blob/14a13ec1b10b2d42976fd08784e5b47ea2429d59/code/scPipe.R
-anno <- NULL
-if (file_ext(gtf) == "gff") {
-    gr <- rtracklayer::import(gtf)
-    exon_gr <- gr[gr$type == "exon"]
-    saf <- data.frame(
-        GeneID = sapply(exon_gr$Parent, "[[", 1),
-        Chr = seqnames(exon_gr),
-        Start = start(exon_gr),
-        End = end(exon_gr),
-        Strand = strand(exon_gr))
-
-    ercc_gr <- rtracklayer::import(ercc)
-    ercc_exon_gr <- ercc_gr[ercc_gr$type == "exon"]
-    ercc_saf <- data.frame(
-        GeneID = ercc_exon_gr$Name,
-        Chr = seqnames(ercc_exon_gr),
-        Start = start(ercc_exon_gr),
-        End = end(ercc_exon_gr),
-        Strand = strand(ercc_exon_gr))
-    anno <- rbind(saf, ercc_saf)
-} else {
-    anno <- c(gtf, ercc)
-}
+anno <- c(gtf, ercc)
 
 # modify test data, otherwise report crashes -----------------------------------
 
@@ -114,7 +90,8 @@ if (grepl(test_dir, datadir)) {
 
 # create report from demultiplexed output --------------------------------------
 
-create_report(
+# create the report Rmd (this will fail but we will fix it)
+try(create_report(
     sample_name = plate,
     outdir = datadir,
     r1 = fq_R1,
@@ -134,4 +111,30 @@ create_report(
     gene_fl = gene_fl,
     organism = organism,
     gene_id_type = gene_id_type
+))
+
+# fix the report, based on code from Peter Hickey
+# https://github.com/WEHISCORE/C122_Clucas/blob/14a13ec1b10b2d42976fd08784e5b47ea2429d59/code/scPipe.R
+tmp <- readLines(file.path(datadir, "report.Rmd"))
+
+# we want to quit after the mapping statistics have been rendered
+last_line <- grep("plot_mapping", tmp, value = FALSE) %>% max()
+tmp <- c(tmp[1:last_line],
+        "knitr::knit_exit()",
+        tmp[last_line:length(tmp)])
+
+writeLines(tmp, file.path(datadir, "report.Rmd"))
+knitr::wrap_rmd(
+    file = file.path(datadir, "report.Rmd"),
+    width = 120,
+    backup = NULL)
+rmarkdown::render(
+    input = file.path(datadir, "report.Rmd"),
+    output_file = file.path(datadir, "report.html"),
+    knit_root_dir = ".")
+
+# get rid of .nb
+file.rename(
+    from = file.path(datadir, "report.nb.html"),
+    to = file.path(datadir, "report.html")
 )
