@@ -39,7 +39,7 @@ file_bc_len <- nchar(bc[1, 2])
 if (file_bc_len > barcode_len) {
     print('Writing trimmed barcode file.')
 
-    bc[, 2] <- substr(bc$Cell_Barcode, 1, barcode_len)
+    bc[, 2] <- substr(bc$barcode, 1, barcode_len)
 
     bc_file <- trimmed_barcodes_file <- file.path(dirname(bc_file), 'barcodes_trimmed.csv')
     write.table(bc, file = bc_file, row.names = FALSE, quote = FALSE, sep = ',')
