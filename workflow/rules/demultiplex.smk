@@ -43,7 +43,7 @@ elif demux_tool == "bcl-convert":
         log:
             "logs/bclconvert.log",
         envmodules:
-            "bcl-convert/3.9.3",
+            "bcl-convert/3.10.5",
         threads: cluster["bcl2fastq"]["threads"]
         resources:
             mem_mb=cluster["bcl2fastq"]["mem_mb"],
@@ -60,12 +60,12 @@ elif demux_tool == "bcl-convert":
 
 rule mergelanes:
     input:
-        fastq=[
-            "results/bcl_output/{sample}{lane}_{readend}_001.fastq.gz".format(
-                sample=sample, lane=lane, readend=readend
-            )
-            for sample, lane, readend in zip(samples, lanes, READENDS)
-        ],
+        fastqs=expand(
+                "results/bcl_output/{sample}{lane}_{readend}_001.fastq.gz",
+                sample=samples,
+                lane=lanes,
+                readend=READENDS,
+            ),
     output:
         "fastq/{sample}_{readend}.fastq.gz",
     log:

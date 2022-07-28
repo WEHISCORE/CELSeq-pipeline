@@ -23,7 +23,7 @@ if process_from_bcl:
     include: "rules/demultiplex.smk"
 
 
-if run_qc:
+if run_qc or process_from_bcl:
 
     include: "rules/qc.smk"
 
