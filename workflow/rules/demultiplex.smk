@@ -61,11 +61,11 @@ elif demux_tool == "bcl-convert":
 rule mergelanes:
     input:
         fastqs=expand(
-                "results/bcl_output/{sample}{lane}_{readend}_001.fastq.gz",
-                sample=samples,
-                lane=lanes,
-                readend=READENDS,
-            ),
+            "results/bcl_output/{sample}{lane}_{readend}_001.fastq.gz",
+            sample=samples,
+            lane=lanes,
+            readend=READENDS,
+        ),
     output:
         "fastq/{sample}_{readend}.fastq.gz",
     log:
