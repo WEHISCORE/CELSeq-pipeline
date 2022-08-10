@@ -83,17 +83,24 @@ else:
         samples.append(f.split("_R1")[0])
 
 # ------------- set up barcode annotation file ------------
-barcode_exists = os.path.exists(config["barcode_file"])
-sample_sheet_exists = os.path.exists(config["sample_sheet"])
+barcode_file = config["barcode_file"]
+sample_sheet = config["sample_sheet"]
 
-if not barcode_exists and sample_sheet_exists:
-    primer_column = config["primer_column"]
+barcode_exists = os.path.exists(barcode_file)
+sample_sheet_exists = os.path.exists(sample_sheet)
+
+
+def make_barcode_file(sample_sheet, barcode_file, primer_column):
+    if not os.path.exists(sample_sheet):
+        print(f"Sample sheet {sample_sheet} does not exist!", file=sys.stderr)
+        sys.exit()
+
     if primer_column is None or primer_column == "":
         print("Please specify primer column name.", file=sys.stderr)
         sys.exit()
 
     # if barcode file doesn't exist, create it from sample sheet
-    sample_sheet = pd.read_csv(config["sample_sheet"], sep=",")
+    sample_sheet = pd.read_csv(sample_sheet, sep=",")
     barcode_col = [primer_column in col for col in sample_sheet.columns]
     barcode_col = sample_sheet.columns[barcode_col].values
 
@@ -109,7 +116,17 @@ if not barcode_exists and sample_sheet_exists:
         sys.exit()
 
     barcode_df = pd.DataFrame.from_dict({"cell_id": cell_ids, "barcode": barcodes})
-    barcode_df.to_csv(config["barcode_file"], sep=",", index=False)
+    barcode_df.to_csv(barcode_file, sep=",", index=False)
+
+
+if "{sample}" in sample_sheet and "{sample}" in barcode_file:
+    for sample in samples:
+        this_sample_sheet = sample_sheet.format(sample=sample)
+        this_barcode_file = barcode_file.format(sample=sample)
+        make_barcode_file(this_sample_sheet, this_barcode_file, config["primer_column"])
+
+elif not barcode_exists and sample_sheet_exists:
+    make_barcode_file(sample_sheet, barcode_file, config["primer_column"])
 
 elif not barcode_exists and not sample_sheet_exists:
     print("Neither barcode file or sample sheet was found!", file=sys.stderr)

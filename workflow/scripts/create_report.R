@@ -11,6 +11,7 @@ options(error = quote({dump.frames(); save.image(file = "last.dump.rda")}))
 # input params -----------------------------------------------------------------
 
 counts_file <- snakemake@input[['counts']]
+bc_file <- snakemake@input[['barcodes']]
 datadir <- file.path(getwd(), dirname(counts_file)) # need absolute path
 
 rs <- snakemake@config[['read_structure']]
@@ -24,7 +25,6 @@ genome_index <- snakemake@config[['ref']][['star_index']]
 gtf <- snakemake@config[['ref']][['gtf']]
 ercc <- system.file("extdata", "ERCC92_anno.gff3", package = "scPipe")
 strand <- as.logical(snakemake@config[['strand']])
-bc_file <- snakemake@config[['barcode_file']]
 
 max_mis <- as.integer(snakemake@config[['max_barcode_mismatches']])
 UMI_cor <- as.integer(snakemake@config[['correct_UMI_error']])
@@ -35,6 +35,11 @@ gene_id_type <- snakemake@config[['gene_id_type']]
 fix_chr <- FALSE
 
 # process params ---------------------------------------------------------------
+
+trimmed_barcodes_file <- paste0(file_path_sans_ext(bc_file), '_trimmed.csv')
+if (file.exists(trimmed_barcodes_file)) {
+    bc_file <- trimmed_barcodes_file
+}
 
 swap_reads <- as.logical(rs$barcode_in_r1)
 if (swap_reads) {

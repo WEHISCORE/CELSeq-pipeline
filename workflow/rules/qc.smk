@@ -53,7 +53,7 @@ rule multiQC:
             "results/fastqScreen/{sample}_R1_screen.html", sample=samples
         ),
     output:
-        "results/qc_metrics/multiqc_report.html",
+        "results/multiqc/multiqc_report.html",
     log:
         "logs/multiQC.log",
     conda:
@@ -64,6 +64,11 @@ rule multiQC:
         runtime=cluster["multiqc"]["runtime"],
     shell:
         """
-        multiqc results/fastQC/ results/fastqScreen/ \
-            -o results/qc_metrics -f
+        dirs="results/fastQC/ results/fastqScreen/"
+
+        if [ -d results/bcl_output ]; then
+            dirs="results/bcl_output $dirs"
+        fi
+
+        multiqc $dirs -o results/multiqc -f
         """
