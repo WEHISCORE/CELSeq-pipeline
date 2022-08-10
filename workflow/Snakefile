@@ -29,10 +29,13 @@ if run_qc or process_from_bcl:
 
 
 include: "rules/align.smk"
+
+
 include: "rules/sc.smk"
 
 
 # ------------- workflow ------------
+
 
 if process_from_bcl:
 
@@ -42,7 +45,7 @@ if process_from_bcl:
             get_mergelanes_output(),
             get_fastqc_output(),
             get_fastqscreen_output(),
-            "results/qc_metrics/multiqc_report.html",
+            "results/multiqc/multiqc_report.html",
             get_trim_barcode_output(),
             get_align_output(),
             get_exon_mapping_output(),
@@ -58,7 +61,7 @@ elif run_qc:
         input:
             get_fastqc_output(),
             get_fastqscreen_output(),
-            "results/qc_metrics/multiqc_report.html",
+            "results/multiqc/multiqc_report.html",
             get_trim_barcode_output(),
             get_align_output(),
             get_exon_mapping_output(),

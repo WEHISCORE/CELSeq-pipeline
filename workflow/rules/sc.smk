@@ -39,6 +39,7 @@ rule exon_mapping:
 rule sc_demultiplex:
     input:
         bam="results/exon_mapping/{sample}_exon_mapping.bam",
+        barcodes=config["barcode_file"],
     output:
         "results/sc_demultiplex/{sample}/stat/overall_stat.csv",
     log:
@@ -55,7 +56,8 @@ rule sc_demultiplex:
 
 rule sc_gene_counting:
     input:
-        "results/sc_demultiplex/{sample}/stat/overall_stat.csv",
+        stats="results/sc_demultiplex/{sample}/stat/overall_stat.csv",
+        barcodes=config["barcode_file"],
     output:
         "results/sc_demultiplex/{sample}/gene_count.csv",
     log:
@@ -91,6 +93,7 @@ rule create_report:
     input:
         r1="fastq/{sample}_R1.fastq.gz",
         r2="fastq/{sample}_R2.fastq.gz",
+        barcodes=config["barcode_file"],
         counts="results/sc_demultiplex/{sample}/gene_count.csv",
         trimfq="results/trimmed/{sample}_combined.fastq.gz",
         align_bam="results/aligned/{sample}/Aligned.sortedByCoord.out.bam",

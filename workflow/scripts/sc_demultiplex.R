@@ -4,18 +4,18 @@ sink(log)
 sink(log, type='message')
 
 library(scPipe)
+library(tools)
 
 # input params -----------------------------------------------------------------
 
 rs <- snakemake@config[['read_structure']]
 bam <- snakemake@input[['bam']]
+bc_file <- snakemake@input[['barcodes']]
 
 mito <- snakemake@config[['mito']]
 max_mis <- as.integer(snakemake@config[['max_barcode_mismatches']])
 
-bc_file <- snakemake@config[['barcode_file']]
 threads <- as.integer(snakemake@threads)
-
 outdir <- dirname(dirname(snakemake@output[[1]]))
 
 # process settings -------------------------------------------------------------
@@ -41,7 +41,7 @@ if (file_bc_len > barcode_len) {
 
     bc[, 2] <- substr(bc$barcode, 1, barcode_len)
 
-    bc_file <- trimmed_barcodes_file <- file.path(dirname(bc_file), 'barcodes_trimmed.csv')
+    bc_file <- paste0(file_path_sans_ext(bc_file), '_trimmed.csv')
     write.table(bc, file = bc_file, row.names = FALSE, quote = FALSE, sep = ',')
 }
 

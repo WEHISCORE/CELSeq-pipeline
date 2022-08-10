@@ -23,9 +23,13 @@ run_qc: True
 
 # Sample sheet containing experiment metadata.
 # Will be used to generate a barcode file if
-# one doesn't exist.
-# See README for more file format details.
-sample_sheet: metadata/sample_sheet.csv
+# one doesn't exist. See README for more file
+# format details. Note that you can use the
+# wildcard {sample} in the filename for sample/
+# plate-specific sample-sheets. In this case,
+# you must specify a corresponding {sample}
+# wildcard file name for the barcode file.
+sample_sheet: metadata/scpipe_sample_sheet.csv
 
 # column name containing index sequence in sample sheet
 primer_column: rd1_index_sequence

@@ -5,7 +5,7 @@ if demux_tool == "bcl2fastq":
             samplesheet=config["bcl_sample_sheet"],
         output:
             fastq=expand(
-                "results/bcl_output/{sample}_{lane}_{readend}_001.fastq.gz",
+                "results/bcl_output/{sample}{lane}_{readend}_001.fastq.gz",
                 sample=samples,
                 lane=lanes,
                 readend=READENDS,
