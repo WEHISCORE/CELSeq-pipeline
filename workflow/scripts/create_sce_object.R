@@ -17,7 +17,7 @@ pheno_data_file <- snakemake@config[['sample_sheet']]
 outfile <- snakemake@output[[1]]
 
 if (file.exists(pheno_data_file)) {
-    pheno_data <- read.delim(pheno_data_file, sep=',')
+    pheno_data <- read.delim(pheno_data_file, sep=',', row.names = 1)
 } else {
     pheno_data <- NULL
     print('WARNING: Sample sheet not found. Unable to add phenotype data.')

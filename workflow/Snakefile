@@ -29,8 +29,6 @@ if run_qc or process_from_bcl:
 
 
 include: "rules/align.smk"
-
-
 include: "rules/sc.smk"
 
 
